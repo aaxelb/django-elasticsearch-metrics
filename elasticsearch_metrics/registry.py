@@ -2,7 +2,7 @@ from django.apps import apps
 from collections import defaultdict, OrderedDict
 
 
-class Registry(object):
+class Registry:
     """Registry that keeps track of Metric classes (similar to how
     django.apps.registry.Apps keeps track of Model classes).
     """

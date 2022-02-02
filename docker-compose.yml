@@ -5,3 +5,12 @@ services:
     ports:
       # Prevent clashing with another running cluster
       - 9201:9200
+  dem_dev:
+    build:
+      context: .
+    environment:
+      DJANGO_SETTINGS_MODULE: tests.settings
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./:/code:cached
