@@ -2,9 +2,6 @@ version: '3'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
-    ports:
-      # Prevent clashing with another running cluster
-      - 9201:9200
   dem_dev:
     build:
       context: .

@@ -4,7 +4,6 @@ from django.utils import timezone
 from elasticsearch.exceptions import NotFoundError
 from elasticsearch_dsl import Document, connections, Index
 from elasticsearch_dsl.document import IndexMeta, MetaField
-from elasticsearch_dsl.index import DEFAULT_INDEX
 
 from elasticsearch_metrics import signals
 from elasticsearch_metrics import exceptions
@@ -76,11 +75,11 @@ class MetricMeta(IndexMeta):
         if opts is None:
             # Inherit Index from base classes
             for b in bases:
-                if getattr(b, "_index", DEFAULT_INDEX) is not DEFAULT_INDEX:
+                if hasattr(b, "_index"):
                     parent_index = b._index
                     i = Index(
                         parent_index._name,
-                        doc_type=parent_index._mapping.doc_type,
+                        doc_type=getattr(parent_index._mapping, 'doc_type', 'doc'),
                         using=parent_index._using,
                     )
                     i._settings = parent_index._settings.copy()
