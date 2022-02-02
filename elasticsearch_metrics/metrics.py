@@ -4,7 +4,6 @@ from django.utils import timezone
 from elasticsearch.exceptions import NotFoundError
 from elasticsearch_dsl import Document, connections, Index
 from elasticsearch_dsl.document import IndexMeta, MetaField
-from elasticsearch_dsl.index import DEFAULT_INDEX
 
 from elasticsearch_metrics import signals
 from elasticsearch_metrics import exceptions
@@ -76,23 +75,16 @@ class MetricMeta(IndexMeta):
         if opts is None:
             # Inherit Index from base classes
             for b in bases:
-                if getattr(b, "_index", DEFAULT_INDEX) is not DEFAULT_INDEX:
+                if hasattr(b, "_index"):
                     parent_index = b._index
-                    i = Index(
-                        parent_index._name,
-                        doc_type=parent_index._mapping.doc_type,
-                        using=parent_index._using,
-                    )
+                    i = Index(parent_index._name, using=parent_index._using)
                     i._settings = parent_index._settings.copy()
                     i._aliases = parent_index._aliases.copy()
                     i._analysis = parent_index._analysis.copy()
-                    i._doc_types = parent_index._doc_types[:]
                     break
         if i is None:
             i = Index(
-                getattr(opts, "name", "*"),
-                doc_type=getattr(opts, "doc_type", "doc"),
-                using=getattr(opts, "using", "default"),
+                getattr(opts, "name", "*"), using=getattr(opts, "using", "default")
             )
         i.settings(**getattr(opts, "settings", {}))
         i.aliases(**getattr(opts, "aliases", {}))
@@ -153,7 +145,7 @@ class BaseMetric(metaclass=MetricMeta):
         """
         client = connections.get_connection(using or "default")
         try:
-            template = client.indices.get_template(cls._template_name)
+            template = client.indices.get_template(name=cls._template_name)
         except NotFoundError as client_error:
             template_name = cls._template_name
             metric_name = cls.__name__

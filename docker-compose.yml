@@ -1,10 +1,13 @@
 version: '3'
+
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.23
-    ports:
-      # Prevent clashing with another running cluster
-      - 9201:9200
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
+    networks:
+      - dev
+    environment:
+      discovery.type: single-node
+
   dem_dev:
     build:
       context: .
@@ -14,3 +17,9 @@ services:
       - elasticsearch
     volumes:
       - ./:/code:cached
+    networks:
+      - dev
+
+networks:
+  dev:
+    driver: bridge

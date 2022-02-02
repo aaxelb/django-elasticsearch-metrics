@@ -69,8 +69,8 @@ class TestGetIndexTemplate:
     def test_get_index_template_creates_template_with_mapping(self):
         template = PreprintView.get_index_template()
         mappings = template.to_dict()["mappings"]
-        assert mappings["doc"]["_source"]["enabled"] is False
-        properties = mappings["doc"]["properties"]
+        assert mappings["_source"]["enabled"] is False
+        properties = mappings["properties"]
         assert "timestamp" in properties
         assert properties["timestamp"] == {"doc_values": True, "type": "date"}
         assert properties["provider_id"] == {"type": "keyword", "index": True}
@@ -81,10 +81,10 @@ class TestGetIndexTemplate:
     def test_mappings_are_not_shared(self):
         template1 = DummyMetric.get_index_template()
         template2 = DummyMetricWithExplicitTemplateName.get_index_template()
-        assert "my_int" in template1.to_dict()["mappings"]["doc"]["properties"]
-        assert "my_keyword" not in template1.to_dict()["mappings"]["doc"]["properties"]
-        assert "my_int" not in template2.to_dict()["mappings"]["doc"]["properties"]
-        assert "my_keyword" in template2.to_dict()["mappings"]["doc"]["properties"]
+        assert "my_int" in template1.to_dict()["mappings"]["properties"]
+        assert "my_keyword" not in template1.to_dict()["mappings"]["properties"]
+        assert "my_int" not in template2.to_dict()["mappings"]["properties"]
+        assert "my_keyword" in template2.to_dict()["mappings"]["properties"]
 
     def test_declaring_metric_with_no_app_label_or_template_name_errors(self):
         with pytest.raises(RuntimeError):
@@ -162,8 +162,7 @@ class TestGetIndexTemplate:
         template = MyMetric.get_index_template()
 
         template_dict = template.to_dict()
-        doc = template_dict["mappings"]["doc"]
-        assert doc["_source"]["enabled"] is True
+        assert template_dict["mappings"]["_source"]["enabled"] is True
 
 
 class TestRecord:
@@ -237,7 +236,7 @@ class TestIntegration:
         PreprintView.init()
         name = PreprintView.get_index_name()
         mapping = client.indices.get_mapping(index=name)
-        properties = mapping[name]["mappings"]["doc"]["properties"]
+        properties = mapping[name]["mappings"]["properties"]
         assert properties["timestamp"] == {"type": "date"}
         assert properties["provider_id"] == {"type": "keyword"}
         assert properties["user_id"] == {"type": "keyword"}

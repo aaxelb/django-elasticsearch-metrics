@@ -7,6 +7,7 @@ INSTALLED_APPS = ["elasticsearch_metrics", "tests.dummyapp"]
 MIDDLEWARE_CLASSES = []
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3"}}
 TIME_ZONE = "UTC"
+USE_TZ = True
 ELASTICSEARCH_DSL = {
     "default": {"hosts": os.environ.get("ELASTICSEARCH_HOST", "elasticsearch:9200")}
 }

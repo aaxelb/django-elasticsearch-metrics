@@ -62,7 +62,7 @@ setup(
         "metrics",
         "statistics",
     ),
-    install_requires=["elasticsearch-dsl==6.4.0"],
+    install_requires=["elasticsearch-dsl>=7.0,<8.0"],
     extras_require=EXTRAS_REQUIRE,
     classifiers=[
         "Operating System :: OS Independent",
