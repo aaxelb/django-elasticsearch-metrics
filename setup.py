@@ -8,12 +8,14 @@ EXTRAS_REQUIRE = {
     "tests": ["pytest", "mock", "pytest-django==4.5.2", "factory-boy==2.11.1"],
     "lint": [
         "flake8==3.6.0",
-        'flake8-bugbear==18.8.0; python_version >= "3.6"',
+        'flake8-bugbear==18.8.0; python_version >= "3.7"',
         "pre-commit==2.17.0",
     ],
 }
 EXTRAS_REQUIRE["dev"] = (
-    EXTRAS_REQUIRE["tests"] + EXTRAS_REQUIRE["lint"] + ["konch>=3.0.0", "tox", "tox-pyenv"]
+    EXTRAS_REQUIRE["tests"]
+    + EXTRAS_REQUIRE["lint"]
+    + ["konch>=3.0.0", "tox", "tox-pyenv"]
 )
 
 
@@ -60,7 +62,7 @@ setup(
         "metrics",
         "statistics",
     ),
-    install_requires=["elasticsearch-dsl>=6.0.0,<6.3.0"],
+    install_requires=["elasticsearch-dsl==6.4.0"],
     extras_require=EXTRAS_REQUIRE,
     classifiers=[
         "Operating System :: OS Independent",
