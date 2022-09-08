@@ -41,7 +41,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "elasticsearch-dsl>=6.3.0,<7.0.0",
+    "elasticsearch-dsl>=7.0.0,<8.0.0",
 ]
 authors = [
     { name = "Steven Loria", email = "steve@cos.io" },

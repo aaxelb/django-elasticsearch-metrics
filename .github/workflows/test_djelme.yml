@@ -35,18 +35,16 @@ jobs:
           - {python: '3.10', django: '1.11'}
           - {python: '3.10', django: '2.0'}
     runs-on: ubuntu-latest
+    container: python:${{matrix.python}}-slim
     services:
-      elasticsearch:
-        image: elasticsearch:6.8.23
-        ports:
-          - 9201:9200
+      elasticsearch7:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.6
+        env:
+          discovery.type: single-node
+    env:
+      ELASTICSEARCH_HOST: elasticsearch7:9200
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        id: setup-py
-        with:
-          python-version: ${{ matrix.python }}
       - run: pip install .[dev]
-      - run: alias python${{ steps.setup-py.outputs.python-version }}=${{ steps.setup-py.outputs.python-path }}
       - run: TOXENV=`echo 'py${{matrix.python}}-django${{matrix.django}}' | sed 's/\.//g'` tox
 
