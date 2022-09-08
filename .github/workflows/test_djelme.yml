@@ -46,7 +46,7 @@ jobs:
         id: setup-py
         with:
           python-version: ${{ matrix.python }}
-      - run: python -m pip install .[dev]
+      - run: pip install .[dev]
       - run: alias python${{ steps.setup-py.outputs.python-version }}=${{ steps.setup-py.outputs.python-path }}
       - run: TOXENV=`echo 'py${{matrix.python}}-django${{matrix.django}}' | sed 's/\.//g'` tox
 
